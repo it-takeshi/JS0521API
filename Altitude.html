@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>標高 API</h1>
+  <button id="btn">データ取得</button>
+  <p>場所：富士山頂</p>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- axiosライブラリの読み込み -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+  <script>
+
+ // // リクエストURL
+    const url = "https://map.yahooapis.jp/alt/V1/getAltitude";
+    // // APIキー
+  let appid ="dj00aiZpPUZRR0JNd3VzaUYzUyZzPWNvbnN1bWVyc2VjcmV0Jng9MjE-";
+
+  // 経度緯度
+  let coord ="138.727363,35.360626 ";
+
+ // APIへリクエスト
+axios.get("https://map.yahooapis.jp/alt/V1/getAltitude?&coordinates="+coord+"&output=jsonp&appid"+appid)
+        .then(function (response) {
+        // リクエスト成功時の処理(responseに結果が入っている)
+        console.log(response);
+
+      })
+  </script>
+
+</body>
+</html>

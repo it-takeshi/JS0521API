@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>位置情報取得&map表示</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #map {
+      height: calc(100% - 400px);
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>位置情報取得&Map表示</h1>
+  <div id="map"></div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- axiosライブラリの読み込み -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+  <script src='https://www.bing.com/api/maps/mapcontrol?key=AivMC9h9WoL6xj3UuKthdPbcSGjWkxlXDRx1tklooyaxmyTT2YqUASq4XKlB51Uv' async defer></script>
+
+  <script>
+
+    // map表示用に使用する変数
+    let map;
+
+const option={
+  enableHighAccuracy: true,
+  maximumAge: 20000, 
+  timeout: 1000000,
+}
+// ピンの生成
+function pushPin(lat, lng, map) {
+const location = new Microsoft.Maps.Location(lat, lng) 
+const pin = new Microsoft.Maps.Pushpin(location, {
+color: 'navy', // 色の設定
+visible: true, // これ書かないとピンが見えない 
+});
+map.entities.push(pin); };
+
+// infobox􏰀生成
+function generateInfobox(lat, lng, map) {
+const location = new Microsoft.Maps.Location(lat, lng) 
+const infobox = new Microsoft.Maps.Infobox(location, {
+title: 'イマココ',
+description: "I'm here!!!" });
+infobox.setMap(map); 
+}
+
+
+// 現在地の取得に成功したときの関数(window.onloadで読み込みした後、ここ一番最後に入力)
+function mapsInit(position) {
+const lat = position.coords.latitude; 
+const lng = position.coords.longitude; 
+map = new Microsoft.Maps.Map('#map', {
+center: {
+latitude: lat, longitude: lng },
+zoom: 25, });
+
+// ピンを立てる// infoboxを生成する関数
+pushPin(lat, lng, map);
+generateInfobox(lat, lng, map); 
+// weather(lat.lang)
+}
+
+
+// 現在位置の取得に失敗したの実行する関数
+function showError(error) { let e = '';
+if (error.code == 1) {
+e = '位置情報が許可されてません'; 
+} else if (error.code == 2) {
+e = '現在位置を特定できません';
+} else if (error.code == 3) {
+e = '位置情報を取得する前にタイムアウトになりました'; }
+alert('error:' + e); 
+}
+
+// 位置情報を取りにくい処理,全部読み込みしてから実行する/
+window.onload = function (){
+  navigator.geolocation.getCurrentPosition(mapsInit, showError, option);
+}
+
+
+
+// 場所情報API
+
+// // リクエストURL
+const url ="https://map.yahooapis.jp/placeinfo/V1/get";
+
+// // APIキー
+let appid ="dj00aiZpPUZRR0JNd3VzaUYzUyZzPWNvbnN1bWVyc2VjcmV0Jng9MjE-";
+
+// APIへリクエスト
+axios.get("https://map.yahooapis.jp/placeinfo/V1/get?lat=33.5867524&lon=130.3944113&appid=dj00aiZpPUZRR0JNd3VzaUYzUyZzPWNvbnN1bWVyc2VjcmV0Jng9MjE-&output=json&appid")
+        .then(function (response) {
+        // リクエスト成功時の処理(responseに結果が入っている)
+        console.log(response);
+
+      })
+
+  </script>
+
+</body>
+
+</html>

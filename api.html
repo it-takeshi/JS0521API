@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Yahoo API</title>
+  </head>  
+
+  <body>
+
+    <div class="main">
+      <h1>天気 API</h1>
+        <button id="btn">データ取得</button>
+        <p>場所：富士山頂</p>
+        <div id="fall"></div>
+        <div id="rain00"></div>
+        <div id="rain01"></div>
+        <div id="rain02"></div>
+        <div id="rain03"></div>
+        <div id="rain04"></div>
+        <div id="rain05"></div>
+        <div id="rain06"></div>
+        <div id="name"></div>
+
+        
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d26655086.834345747!2d138.72732!3d35.360739!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xa6b1b7f6dc36b606!2z5Ymj44O25bOw!5e0!3m2!1sja!2sjp!4v1621546387027!5m2!1sja!2sjp" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
+    </div>
+    
+
+      
+    
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <!-- axiosライブラリの読み込み -->
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script> 
+      <script>
+        // // リクエストURL
+        const url = "https://map.yahooapis.jp/weather/V1/place";
+       // // APIキー
+        let appid ="dj00aiZpPUZRR0JNd3VzaUYzUyZzPWNvbnN1bWVyc2VjcmV0Jng9MjE-";
+
+      // 経度緯度
+        // let coord ="130.3944113,33.5867524 ";
+        let coord ="138.727363,35.360626 ";
+
+        // APIへリクエスト
+        axios.get("https://map.yahooapis.jp/weather/V1/place?&output=jsonp&appid&coordinates=138.727363,35.360626&appid=dj00aiZpPUZRR0JNd3VzaUYzUyZzPWNvbnN1bWVyc2VjcmV0Jng9MjE-")
+        .then(function (response) {
+        // リクエスト成功時の処理(responseに結果が入っている)
+        console.log(response.data.Feature);
+
+        const data =[];
+        //  const type =[];
+        //  const time =[];
+        
+        response.data.Feature[0].Property.WeatherList.Weather.forEach(function(x){
+        data.push(x.Rainfall);
+        });
+
+        $('#rain00').html(`10分前 降水量:${data[0]}m/h`);
+        $('#rain01').html(`今現在${data[1]}m/h`);
+        $('#rain02').html(`10分後${data[2]}m/h`);
+        $('#rain03').html(`20分後${data[3]}m/h`);
+        $('#rain04').html(`30分後${data[4]}m/h`);
+        $('#rain05').html(`40分後${data[5]}m/h`);
+        $('#rain06').html(`50分後${data[6]}m/h`);
+
+
+
+})
+
+      </script> 
+      
+  </body>
+
+</html>
+
+<!-- 
+        let r0 =data.Feature[0].Property.WeatherList.Weather[0].Rainfall;
+        let r1 =data.Feature[0].Property.WeatherList.Weather[1].Rainfall;
+        let r2 =data.Feature[0].Property.WeatherList.Weather[2].Rainfall;
+        let r3 =data.Feature[0].Property.WeatherList.Weather[3].Rainfall;
+        let r4 =data.Feature[0].Property.WeatherList.Weather[4].Rainfall;
+        let r5 =data.Feature[0].Property.WeatherList.Weather[5].Rainfall;
+        let r6 =data.Feature[0].Property.WeatherList.Weather[6].Rainfall;
+
+        $('#rain00').html("降水強度予測値:今現在="+r0+"(mm/h)");
+        $('#rain01').html("降水強度予測値:今現在="+r1+"(mm/h)");
+        $('#rain02').html("降水強度予測値:今現在="+r2+"(mm/h)");
+        $('#rain03').html("降水強度予測値:今現在="+r3+"(mm/h)");
+        $('#rain04').html("降水強度予測値:今現在="+r4+"(mm/h)");
+        $('#rain05').html("降水強度予測値:今現在="+r5+"(mm/h)");
+        $('#rain06').html("降水強度予測値:今現在="+r6+"(mm/h)"); -->
